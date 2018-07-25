@@ -1,4 +1,18 @@
 const Person = require('../models/Person');
+const multer = require('multer');
+const multerOptions = {
+    storage: multer.memoryStorage(),
+    fileFilter(req, file, next){
+        const isPhoto = file.mimetype.startsWith('image/');
+        if(isPhoto){
+            next(null, true);
+        }else{
+            next({message: 'That filetype isn\'t allowed'}, false)
+        }
+    }
+};
+
+exports.upload = multer(multerOptions).single('photo');
 
 //create
 exports.createPerson = async (req, res) => {

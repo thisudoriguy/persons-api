@@ -1,2 +1,2 @@
-## globalacclerex persons api
+## globalaccelerex persons api
 
