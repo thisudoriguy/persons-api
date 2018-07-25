@@ -1,103 +1,75 @@
 const Person = require('../models/Person');
-const multer = require('multer');
+// const multer = require('multer');
 
-const multerOptions = {
-    storage: multer.diskStorage({
-        destination: (req, file, cb)=>{
-            cb(null, '/tmp/uploads/images')
-        }
-    }),
-    fileFilter(req, file, next){
-        const isPhoto = file.mimetype.startsWith('image/');
-        if(isPhoto){
-            next(null, true);
-        }else{
-            next({message: 'That filetype isn\'t allowed'}, false)
-        }
-    }
-};
+// const multerOptions = {
+//     storage: multer.diskStorage({
+//         destination: (req, file, cb) => {
+//             cb(null, '/uploads/images')
+//         }
+//     }),
+//     fileFilter(req, file, next) {
+//         const isPhoto = file.mimetype.startsWith('image/');
+//         if (isPhoto) {
+//             next(null, true);
+//         } else {
+//             next({ message: 'That filetype isn\'t allowed' }, false)
+//         }
+//     }
+// };
 
-exports.upload = multer(multerOptions).single('photo');
+// exports.upload = multer(multerOptions).single('photo');
 
 //create
 exports.createPerson = async (req, res) => {
-    try {
-        const { credentials } = req.body;
-        const person = new Person(...credentials);
-        await person.save((err, person)=>{
-            if (err) {
-                res.send({'error': 'An error has occured'});
-            } else {
-                res.json(person); 
-            }
-        });
-    } catch (error) {
-        console.log(error)
-    }
+    const new_person = new Person(req.body);
+    new_person.save(function(err, person) {
+    if (err)
+      res.send(err);
+    res.json(person);
+  });
+
 }
 
 //read
-exports.getPersons = async (req, res) => {
-    try {
-        const person = await Person.find((err, res) => {
-            if (err) {
-                res.send({'error': 'An error has occured'});
-            } else {
-                res.json(person)
-            }
-        })
-    } catch (error) {
-        console.log(error);
-    }
+exports.getPersons = (req, res) => {
+    Person.find({}, function(err, person) {
+        if (err)
+          res.send(err);
+        res.json(person);
+      });
 }
 
 exports.getOnePerson = async (req, res) => {
-    try {
-        const id = req.params._id;
-        const person = await Person.findById(id, (err, res) => {
-            if (err) {
-                res.send({'error': 'An error has occured'});
-            } else {
-                res.json(person)
-            }
-        })
-    } catch (error) {
-        console.log(error);
-    }
+
+    Person.findById(req.params.personId, function(err, person) {
+        if (err)
+          res.send(err);
+        res.json(person);
+      });
+
 }
 
 //update 
 exports.updatePerson = async (req, res) => {
-    try {
-        const id = req.params._id;
-        const person = await Person.findOneAndUpdate({ _id: id }, req.body, {
-            new: true,
-            runValidators: true
-        }, (req, res) => {
-            if (err) {
-                res.send({'error': 'An error has occured'});
-            } else {
-                res.json(person)
-            }
-        })
-    } catch (error) {
-        console.log(error)
-    }
+
+    Person.findOneAndUpdate({_id: req.params.personId}, req.body, {new: true}, function(err, person) {
+        if (err)
+          res.send(err);
+        res.json(person);
+      });
+
 }
 
 //delete
 
-exports.deletePerson = async (req, res)=>{
-    try {
-        const id = req.params._id
-        await Person.findOneAndRemove({_id: id}, (err, res)=>{
-            if (err) {
-                res.send({'error': 'An error has occured'});
-            } else {
-                res.send('Person' + id + 'deleted');
-            }
-        })
-    } catch (error) {
-        console.log(error);
-    }
+exports.deletePerson = async (req, res) => {
+
+    Person.remove({
+        _id: req.params.personId
+      }, function(err, person) {
+        if (err)
+          res.send(err);
+        res.json({ message: 'person successfully deleted' });
+      });
+
 }
