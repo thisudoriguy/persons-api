@@ -9,7 +9,8 @@ require('dotenv').config()
 
 //connect to mongoose
 //change the mlab db
-const mongoDB = process.env.DATABASE;
+//remove this dotenv url when you are done
+const mongoDB = process.env.DATABASE || 'mongodb://person-api:12345678q@ds253821.mlab.com:53821/accelerex_api';
 mongoose.connect(mongoDB);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -18,9 +19,8 @@ const app = express();
 
 app.use(cors());
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 app.use('/', routes)
 
 app.listen(port, ()=>{

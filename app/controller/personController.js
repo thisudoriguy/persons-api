@@ -1,23 +1,23 @@
 const Person = require('../models/Person');
-// const multer = require('multer');
+const multer = require('multer');
 
-// const multerOptions = {
-//     storage: multer.diskStorage({
-//         destination: (req, file, cb) => {
-//             cb(null, '/uploads/images')
-//         }
-//     }),
-//     fileFilter(req, file, next) {
-//         const isPhoto = file.mimetype.startsWith('image/');
-//         if (isPhoto) {
-//             next(null, true);
-//         } else {
-//             next({ message: 'That filetype isn\'t allowed' }, false)
-//         }
-//     }
-// };
+const multerOptions = {
+    storage: multer.diskStorage({
+        destination: function (req, file, cb){
+            cb(null, '/uploads/images')
+        }
+    }),
+    fileFilter(req, file, next) {
+        const isPhoto = file.mimetype.startsWith('image/');
+        if (isPhoto) {
+            next(null, true);
+        } else {
+            next({ message: 'That filetype isn\'t allowed' }, false)
+        }
+    }
+};
 
-// exports.upload = multer(multerOptions).single('photo');
+exports.upload = multer(multerOptions).single('photo');
 
 //create
 exports.createPerson = async (req, res) => {
