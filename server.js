@@ -3,16 +3,14 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const port = 3000;
+const port = process.env.PORT;
 const routes = require('./app/routes/index');
+require('dotenv').config()
 
 //connect to mongoose
 //change the mlab db
-const mongoose = require('mongoose');
-const mongoDB = 'mongodb://locale_library:locale_library@ds153400.mlab.com:53400/locale_library';
-mongoose.connect(mongoDB, {
-  useMongoClient: true
-});
+const mongoDB = process.env.DATABASE;
+mongoose.connect(mongoDB);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 

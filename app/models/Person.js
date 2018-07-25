@@ -12,6 +12,12 @@ const personSchema = new mongoose.Schema({
     description:{
         type: String,
         required: 'Please enter persons description'
+    },
+    photo:{
+        type: String
+    },
+    photo_thumb:{
+
     }
 })
 
