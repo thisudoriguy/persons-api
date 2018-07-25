@@ -14,7 +14,7 @@ mongoose.connect(mongoDB);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-const app = express();
+const app = express(); 
 
 app.use(cors());
 app.use(morgan('dev'));
