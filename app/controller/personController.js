@@ -1,7 +1,12 @@
 const Person = require('../models/Person');
 const multer = require('multer');
+
 const multerOptions = {
-    storage: multer.memoryStorage(),
+    storage: multer.diskStorage({
+        destination: (req, file, cb)=>{
+            cb(null, '/tmp/uploads/images')
+        }
+    }),
     fileFilter(req, file, next){
         const isPhoto = file.mimetype.startsWith('image/');
         if(isPhoto){
