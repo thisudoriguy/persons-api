@@ -10,8 +10,7 @@ require('dotenv').config()
 //connect to mongoose
 //change the mlab db
 //remove this dotenv url when you are done
-const mongoDB = process.env.DATABASE;
-mongoose.connect(mongoDB);
+mongoose.connect(process.env.DATABASE);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
