@@ -28,7 +28,12 @@ const upload = multer({storage: storage, limits: {
 router.get('/', (req, res) => {
     res.json({STATUS: 'OPERATING'})
 });
-router.post('/persons/create', upload.single('photo'), imageHandler.imageHandler, personController.createPerson);
+router.post('/persons/create', 
+    upload.single('photo'), 
+    personController.resize, 
+    imageHandler.imageHandler, 
+    personController.createPerson
+);
 router.get('/persons', personController.getPersons);
 router.get('/persons/:_id', personController.getOnePerson);
 router.put('/persons/edit/:_id', personController.updatePerson);

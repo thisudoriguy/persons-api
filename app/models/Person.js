@@ -17,7 +17,7 @@ const personSchema = new mongoose.Schema({
         type: String
     },
     photo_thumb:{
-
+        type: String
     }
 })
 

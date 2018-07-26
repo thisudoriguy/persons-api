@@ -1,4 +1,17 @@
 const Person = require('../models/Person');
+const jimp = require('jimp');
+
+exports.resize = async (req, res, next)=>{
+    if(!req.file){
+        next();
+        return;
+    }
+     
+    const photo = await jimp.read(req.file.path);
+    await photo.resize(800, jimp.AUTO);
+    await photo.write('./uploads/')
+    next();
+}
 
 //create
 exports.createPerson = async (req, res) => {
@@ -6,7 +19,8 @@ exports.createPerson = async (req, res) => {
         name: req.body.name,
         age: req.body.age,
         description: req.body.description,
-        photo: req.file.path 
+        photo: req.file.originalname,
+        photo_thumb: req.file.path 
     }
     const new_person = new Person(credentials);
 
