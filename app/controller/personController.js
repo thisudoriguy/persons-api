@@ -1,31 +1,19 @@
 const Person = require('../models/Person');
-const multer = require('multer');
-
-const multerOptions = {
-    storage: multer.diskStorage({
-        destination: function (req, file, cb){
-            cb(null, '/uploads/images')
-        }
-    }),
-    fileFilter(req, file, next) {
-        const isPhoto = file.mimetype.startsWith('image/');
-        if (isPhoto) {
-            next(null, true);
-        } else {
-            next({ message: 'That filetype isn\'t allowed' }, false)
-        }
-    }
-};
-
-exports.upload = multer(multerOptions).single('photo');
 
 //create
 exports.createPerson = async (req, res) => {
-    const new_person = new Person(req.body);
+    const credentials = {
+        name: req.body.name,
+        age: req.body.age,
+        description: req.body.description,
+        photo: req.file.path 
+    }
+    const new_person = new Person(credentials);
+
     new_person.save(function(err, person) {
     if (err)
       res.send(err);
-    res.json(person);
+      res.status(200).json(person);
   });
 
 }
@@ -35,7 +23,7 @@ exports.getPersons = (req, res) => {
     Person.find({}, function(err, person) {
         if (err)
           res.send(err);
-        res.json(person);
+          res.status(200).json(person);
       });
 }
 
@@ -44,7 +32,7 @@ exports.getOnePerson = async (req, res) => {
     Person.findById(req.params.personId, function(err, person) {
         if (err)
           res.send(err);
-        res.json(person);
+          res.status(200).json(person);
       });
 
 }
@@ -55,7 +43,7 @@ exports.updatePerson = async (req, res) => {
     Person.findOneAndUpdate({_id: req.params.personId}, req.body, {new: true}, function(err, person) {
         if (err)
           res.send(err);
-        res.json(person);
+          res.status(200).json(person);
       });
 
 }
@@ -69,7 +57,7 @@ exports.deletePerson = async (req, res) => {
       }, function(err, person) {
         if (err)
           res.send(err);
-        res.json({ message: 'person successfully deleted' });
+          res.status(200).json({ message: 'person successfully deleted' });
       });
 
 }

@@ -10,7 +10,7 @@ require('dotenv').config()
 //connect to mongoose
 //change the mlab db
 //remove this dotenv url when you are done
-const mongoDB = process.env.DATABASE || 'mongodb://person-api:12345678q@ds253821.mlab.com:53821/accelerex_api';
+const mongoDB = process.env.DATABASE;
 mongoose.connect(mongoDB);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
